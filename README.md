@@ -1,6 +1,23 @@
 # Embedded Linux Device Health Monitor & Auto-Recovery Agent
 
-Background supervisor for Linux boards and appliances. It polls six health signals, classifies them as OK / WARNING / CRITICAL, writes a log, and runs a bounded recovery action when a metric stays unhealthy.
+A background supervisor for Linux boards and appliances that continuously monitors six critical health signals, classifies system state as OK / WARNING / CRITICAL, and runs bounded recovery actions when metrics stay unhealthy.
+
+## Project Description
+
+This project is a lightweight, zero-dependency C++17 daemon designed for embedded Linux devices — routers, IoT gateways, industrial controllers, and edge appliances. It runs as a systemd service in the background, polling CPU usage, RAM consumption, disk space, SoC temperature, network connectivity, and critical service health at configurable intervals.
+
+When a metric crosses its WARNING or CRITICAL threshold, the agent logs the event and optionally triggers an automated recovery action (e.g., dropping page cache for memory pressure, restarting a failed service, or toggling a network interface). All thresholds, cooldowns, and recovery policies are defined in a single JSON config file — no recompilation needed.
+
+Built with only Linux/POSIX APIs and the C++ STL, it compiles to a small static binary suitable for resource-constrained embedded targets.
+
+## Outcomes & Results
+
+- **Proactive fault detection**: Six health signals monitored continuously — issues are caught and logged before they cause outages, with OK/WARNING/CRITICAL classification for clear severity visibility
+- **Automated self-healing**: Recovery actions (cache drop, service restart, network interface reset, CPU governor change) run automatically on CRITICAL events, reducing mean-time-to-recovery without human intervention
+- **Safe recovery boundaries**: Cooldown timers prevent recovery loops; disk recovery never deletes user files; memory and network actions require root — safety is built in, not bolted on
+- **Zero external dependencies**: Compiles with only GCC/Clang + CMake + pthread, producing a small binary that runs on any Linux 4.x+ kernel — ideal for embedded targets with minimal package managers
+- **Production deployment ready**: systemd service file, install/uninstall scripts, and a failure simulation script for testing — drop it on a board and it runs
+- **Tested and documented**: 4 unit test suites covering CPU, memory, config, and service monitoring, plus a full architecture doc and test report
 
 ## What it monitors
 
@@ -107,3 +124,7 @@ cd build && ctest --output-on-failure
 - Stop with SIGINT or SIGTERM; systemd uses the same signals.
 
 See [docs/architecture.md](docs/architecture.md) for the control loop and [docs/test-report.md](docs/test-report.md) for how the unit tests map to each monitor.
+
+## License
+
+MIT
