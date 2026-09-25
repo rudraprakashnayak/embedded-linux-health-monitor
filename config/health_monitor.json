@@ -1,0 +1,36 @@
+{
+  "poll_interval_seconds": 5,
+  "recovery_cooldown_seconds": 30,
+  "log_file": "/var/log/device-health-monitor.log",
+  "cpu": {
+    "warning_percent": 80,
+    "critical_percent": 95,
+    "recovery": "log"
+  },
+  "memory": {
+    "warning_percent": 80,
+    "critical_percent": 90,
+    "recovery": "drop_caches"
+  },
+  "disk": {
+    "path": "/",
+    "warning_percent": 80,
+    "critical_percent": 90,
+    "recovery": "log"
+  },
+  "temperature": {
+    "warning_celsius": 70,
+    "critical_celsius": 85,
+    "recovery": "set_powersave"
+  },
+  "network": {
+    "interface": "eth0",
+    "check_host": "8.8.8.8",
+    "recovery": "restart_interface"
+  },
+  "service": {
+    "name": "sshd",
+    "process": "sshd",
+    "recovery": "restart_service"
+  }
+}

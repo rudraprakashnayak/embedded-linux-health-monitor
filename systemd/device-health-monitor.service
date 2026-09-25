@@ -1,0 +1,16 @@
+[Unit]
+Description=Embedded Linux Device Health Monitor & Auto-Recovery Agent
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/device-health-monitor /etc/device-health-monitor/health_monitor.json
+Restart=always
+RestartSec=3
+Nice=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
